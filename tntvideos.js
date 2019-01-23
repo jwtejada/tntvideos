@@ -39,84 +39,89 @@ $.fn.setupYoutube = function () {
 })(jQuery);
 
 (function($){ 
-$.fn.extend({          
-	tntvideos: function(options) { 
-	  var defaults = {				
-		youtube: true,
-		youtubeClass: '.youtube',
-		playButton: '.play',
-		closeButton: '.close',
-		mobileWidth: 900
-	}                      
-  	options =  $.extend(defaults, options);
-	if(options.youtube == true) {
-		var yt = options.youtubeClass;
-		ytLazyLoad(yt);
-	}				
-	return this.each(function() {				
-			var o = options;
-		if ($(window).width() > o.mobileWidth) {
-			$(this).find(".thumbnail").remove();
-			$(this)
-				.find("[data-embed]")
-				.prepend('<video autoplay="true" muted="muted" loop="true" src="https://player.vimeo.com/external/' + $(this).data('vimeo') + '&profile_id=174"></video>');
-			}
-		if ($(window).width() < o.mobileWidth) {
-			$(this).find(o.playButton).appendTo("[data-vimeo] [data-embed]");
-		}
-		$(this).on("click", o.playButton, function () {
-			var closeBtn = o.closeButton.replace(/\./g, '');
-			var video_parent = $(this).parents("[data-vimeo]");
-			video_parent
-				.addClass("playing")
-				.find("[data-embed]")
-				.append('<a class="' + closeBtn + '"><i class="icon-plus"></i> Close Video</a>')
-				.setupYoutube();
-			video_parent.find("video, .thumbnail").hide();
-			video_parent.find(o.playButton).hide();
-
-			if ($(window).width() > o.mobileWidth) {
-				$('html, body').animate({
-					scrollTop: video_parent.find("[data-embed]").offset().top - $("header").outerHeight()
-				}, 1000);
-			}
-
-			for (var i = 0; i < $('iframe').length; i++) {
-							$('iframe')[i].contentWindow.postMessage('{"event":"command","func":"' + 'pauseVideo' + '","args":""}', '*');}
-			return false;
-		});
-
-		$(this).on("click", o.closeButton, function () {
-			var video_parent = $(this).parents("[data-vimeo]");						
-			video_parent.removeClass("playing").find(".fluid-vid, iframe").remove();
-						video_parent.find(o.closeButton).remove();
-			video_parent.find("video, .thumbnail").show();
-						video_parent.find(o.playButton).show();
-			$('html, body').animate({
-				scrollTop: video_parent.offset().top - $("header").outerHeight()
-			}, 1000);
-			return false;
-		});								
-	});	
-	
-	//skip load if youtube option is false
-	function ytLazyLoad(yt){
-		$(yt).each(function () {
-			//check if div is empty
-			if($(this).is(':empty')) {
-				$(this)
-				.empty()
-				.append('<img alt="youtube thumbnail" class="thumbnail" src="https://img.youtube.com/vi/' +	$(this).data('embed') + '/maxresdefault.jpg">');
-			}
-			$(this).on("click", function () {
-				$(this).find(".thumbnail").remove();
-				for (var i = 0; i < $('iframe').length; i++) {
-					$('iframe')[i].contentWindow.postMessage('{"event":"command","func":"' + 'pauseVideo' + '","args":""}', '*');
+  $.fn.extend({          
+    tntvideos: function(options) { 
+      var defaults = {
+				youtube: true,
+				youtubeClass: '.youtube',
+				playButton: '.play',
+        closeButton: '.close',				
+				animate: true,
+				offset: $("header").outerHeight(),
+				mobileWidth: 900
+      }                      
+      options =  $.extend(defaults, options);
+			if(options.youtube == true) {
+				var yt = options.youtubeClass;
+				ytLazyLoad(yt);
+			}				
+      return this.each(function() {				
+				var o = options;
+        if ($(window).width() > o.mobileWidth) {
+            $(this).find(".thumbnail").remove();
+            $(this)
+							.find("[data-embed]")
+							.prepend('<video autoplay="true" muted="muted" loop="true" src="https://player.vimeo.com/external/' + $(this).data('vimeo') + '&profile_id=174"></video>');
 				}
-				$(this).addClass("active").setupYoutube();
-			});
-		});  
-	}			
-	}
-});
+				if ($(window).width() < o.mobileWidth) {
+					$(this).find(o.playButton).appendTo("[data-vimeo] [data-embed]");
+				}
+        
+				$(this).on("click", o.playButton, function () {
+						var closeBtn = o.closeButton.replace(/\./g, '');
+            var video_parent = $(this).parents("[data-vimeo]");
+            video_parent
+							.addClass("playing")
+							.find("[data-embed]")
+							.append('<a class="' + closeBtn + '"><i class="icon-plus"></i> Close Video</a>')
+							.setupYoutube();
+            video_parent.find("video, .thumbnail").hide();
+						video_parent.find(o.playButton).hide();
+						
+						if ($(window).width() > o.mobileWidth && o.animate == true) {
+							$('html, body').animate({
+								scrollTop: video_parent.find("[data-embed]").offset().top - o.offset
+							}, 1000);
+						}
+					
+            for (var i = 0; i < $('iframe').length; i++) {
+							$('iframe')[i].contentWindow.postMessage('{"event":"command","func":"' + 'pauseVideo' + '","args":""}', '*');}
+            return false;
+        });
+			
+        $(this).on("click", o.closeButton, function () {
+            var video_parent = $(this).parents("[data-vimeo]");						
+            video_parent.removeClass("playing").find(".fluid-vid, iframe").remove();
+						video_parent.find(o.closeButton).remove();
+            video_parent.find("video, .thumbnail").show();
+						video_parent.find(o.playButton).show();
+            if(o.animate == true) {
+								$('html, body').animate({
+                scrollTop: video_parent.offset().top - o.offset
+            	}, 1000);
+						}
+            return false;
+        });				
+								
+			});		
+			//skip load if option false
+			function ytLazyLoad(yt){
+				$(yt).each(function () {
+						//check if div is empty
+						if($(this).is(':empty')) {
+							$(this)
+								.empty()
+								.append('<img alt="youtube thumbnail" class="thumbnail" src="https://img.youtube.com/vi/' +	$(this).data('embed') + '/maxresdefault.jpg">');
+						}
+						$(this).on("click", function () {
+								$(this).find(".thumbnail").remove();
+								for (var i = 0; i < $('iframe').length; i++) {
+										$('iframe')[i].contentWindow.postMessage('{"event":"command","func":"' + 'pauseVideo' + '","args":""}', '*');
+								}
+								$(this).addClass("active").setupYoutube();
+						});
+				});  
+			}			
+  	}
+	});
 })(jQuery);

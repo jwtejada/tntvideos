@@ -82,8 +82,6 @@ img {
 	transform: rotate(45deg);
 }
 
-
-
 .youtube {
 	position: relative;
 	cursor: pointer;
@@ -122,16 +120,6 @@ img {
 .youtube.active:after {
 	display: none;
 }
-
-
-
-
-
-
-
-
-
-
 
 /* --- custom --- */
 .banner .caption {
