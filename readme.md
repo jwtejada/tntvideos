@@ -31,6 +31,7 @@ $(function () {
 | playButton: '.play'  | Default class for the play button  |
 | closeButton: '.close' |  Default class for the close button |
 | animate: true  | Scroll animation to the top of the container  |
+| mobileWIdth: 900 | Responsive width |
 | offset: Int | By default the offset is the height of the header tag, you can also use an integer.  |
 
 ## Banner HTML
