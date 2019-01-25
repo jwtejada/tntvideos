@@ -48,6 +48,7 @@ $.fn.setupYoutube = function () {
   closeButton: '.close',				
 	animate: true,
 	offset: $("header").outerHeight(),
+	bodyPlaying: null,			
 	mobileWidth: 900
       }                      
       options =  $.extend(defaults, options);
@@ -75,10 +76,16 @@ $.fn.setupYoutube = function () {
         
 	$(this).on("click", o.playButton, function () {
 	  var closeBtn = o.closeButton.replace(/\./g, '');
-   	  var video_parent = $(this).parents("[data-vimeo]");
-   	  var dtype = video_parent.find("[data-embed]").data('player');
+    var video_parent = $(this).parents("[data-vimeo]");
+    var dtype = video_parent.find("[data-embed]").data('player');
+		
+		//check if user wants a header class
+		if(o.bodyPlaying != null) {
+			$("body").addClass(o.bodyPlaying.replace(/\./g, ''));
+		}
 		
 		video_parent.find(o.playButton).hide();
+		
 		if (dtype=="vimeo") {
 		video_parent
 			.addClass("playing")
@@ -109,6 +116,11 @@ $.fn.setupYoutube = function () {
 	    video_parent.find(o.closeButton).remove();
             video_parent.find("video, .thumbnail").show();
 	    video_parent.find(o.playButton).show();
+					
+					if(o.bodyPlaying != null) {
+						$("body").removeClass(o.bodyPlaying.replace(/\./g, ''));
+					}
+					
 					var dtype = video_parent.find("[data-embed]").data('player');
 					if (dtype=="vimeo") {
 						playerVimeo(video_parent);
