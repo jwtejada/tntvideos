@@ -21,7 +21,7 @@ $.fn.setupYoutube = function () {
 	iframe.setAttribute("src", "https://www.youtube.com/embed/" + this.attr("data-embed") + "?rel=0&autoplay=1&playsinline=1&enablejsapi=1");
 	this.prepend(iframe);
 	var videoRatio = (iframe.height / iframe.width) * 100;
-	iframe.style.position = 'absolute';
+		iframe.style.position = 'absolute';
 	iframe.style.top = '0';
 	iframe.style.left = '0';
 	iframe.style.right = '0';
@@ -45,7 +45,7 @@ $.fn.setupYoutube = function () {
 	youtube: true,
 	youtubeClass: '.youtube',
 	playButton: '.play',
-        closeButton: '.close',				
+  closeButton: '.close',				
 	animate: true,
 	offset: $("header").outerHeight(),
 	mobileWidth: 900
@@ -56,27 +56,41 @@ $.fn.setupYoutube = function () {
 	ytLazyLoad(yt);
       }				
       return this.each(function() {				
-	var o = options;
+	var o = options;				
         if ($(window).width() > o.mobileWidth) {
-            $(this).find(".thumbnail").remove();
+            
+				$(this).find(".thumbnail").remove();
             $(this)
 		.find("[data-embed]")
 		.prepend('<video autoplay="true" muted="muted" loop="true" src="https://player.vimeo.com/external/' + $(this).data('vimeo') + '&profile_id=174"></video>');
 	}
 	if ($(window).width() < o.mobileWidth) {
+		var video_parent = $(this).parents("[data-vimeo]");
+		var dtype = video_parent.find("[data-embed]").data('player');	
+		if (dtype == "vimeo") {
+			
+		}		
 		$(this).find(o.playButton).appendTo("[data-vimeo] [data-embed]");
 	}
         
 	$(this).on("click", o.playButton, function () {
-	    var closeBtn = o.closeButton.replace(/\./g, '');
-            var video_parent = $(this).parents("[data-vimeo]");
-            video_parent
-		.addClass("playing")
-		.find("[data-embed]")
-		.append('<a class="' + closeBtn + '"><i class="icon-plus"></i> Close Video</a>')
-		.setupYoutube();
-            video_parent.find("video, .thumbnail").hide();
-	    video_parent.find(o.playButton).hide();
+	  var closeBtn = o.closeButton.replace(/\./g, '');
+   	  var video_parent = $(this).parents("[data-vimeo]");
+   	  var dtype = video_parent.find("[data-embed]").data('player');
+		
+		video_parent.find(o.playButton).hide();
+		if (dtype=="vimeo") {
+		video_parent
+			.addClass("playing")
+			.find("[data-embed]")
+			.append('<a class="' + closeBtn + '"><i class="icon-plus"></i> Close Video</a>');
+			
+			playerVimeo(video_parent);
+		} else {
+		video_parent.addClass("playing").find("[data-embed]").append('<a class="' + closeBtn + '"><i class="icon-plus"></i> Close Video</a>').setupYoutube();			
+    video_parent.find("video, .thumbnail").hide();
+		}
+	  
 						
 	if ($(window).width() > o.mobileWidth && o.animate == true) {
 		$('html, body').animate({
@@ -95,14 +109,41 @@ $.fn.setupYoutube = function () {
 	    video_parent.find(o.closeButton).remove();
             video_parent.find("video, .thumbnail").show();
 	    video_parent.find(o.playButton).show();
+					var dtype = video_parent.find("[data-embed]").data('player');
+					if (dtype=="vimeo") {
+						playerVimeo(video_parent);
+					}
             if(o.animate == true) {
 		$('html, body').animate({
                 scrollTop: video_parent.offset().top - o.offset
-            	}, 1000);						}
+            	}, 1000);	}
             return false;
         });				
 								
 	});		
+	
+	//function to setup vimeo legacy code		
+	function playerVimeo(video_parent) {
+	  var video = video_parent.find("video");			
+		if (video_parent.hasClass('playing')){			
+				video.attr({
+					"controls": "false",
+        	"muted": "true",
+        	"loop": "true"
+         });
+         video[0].muted = 1;
+		}else {     
+        video.attr({
+          "controls": "true",
+          "muted": "false",
+          "loop": "false"
+        });
+        video[0].currentTime = 0;
+        video[0].muted = 0;
+			  video[0].controls = 0;
+		}
+	}				
+			
 	//skip load if option false
 	function ytLazyLoad(yt){
 	$(yt).each(function () {
