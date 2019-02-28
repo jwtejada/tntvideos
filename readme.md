@@ -22,7 +22,10 @@ $(function () {
 		closeButton: '.close',
 		bodyPlaying: null,
 		animate: true,
-		mobileWidth: 900
+		mobileWidth: 900,
+		callback: function() {
+			//do something
+		}
 	});		
 });
 ```
