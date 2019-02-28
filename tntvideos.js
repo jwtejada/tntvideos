@@ -151,10 +151,8 @@ $('.youtube').each(function () {
 			//extra function to setup vimeo legacy code		
 			function playVimeoSolo(vid_obj, closeBtn, vid_stop) {
 				var video = vid_obj.find("video");	
-				if (!vid_stop){	
-					vid_obj.addClass("playing")
-						.find("[data-embed]")
-						.append('<a class="' + closeBtn + '"><i class="icon-plus"></i> Close Video</a>');
+				if (vid_stop){	
+					vid_obj.removeClass("playing");
 					video.attr({
 						"controls": "false",
 						"muted": "true",
@@ -162,8 +160,9 @@ $('.youtube').each(function () {
 					});
 					video[0].muted = 1;
 				}else {    
-					vid_obj.removeClass("playing");
-
+					vid_obj.addClass("playing")
+						.find("[data-embed]")
+						.append('<a class="' + closeBtn + '"><i class="icon-plus"></i> Close Video</a>');			
 					video.attr({
 						"controls": "true",
 						"muted": "false",
