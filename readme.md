@@ -1,5 +1,5 @@
 # TNT Videos
-Code by Tabitha R. modified by Jose T. Use it, try it, modify it, love it or hate it.
+Code by Tabitha R. modified by Jose T.
 
 ## Dependents
 - Get Device 
