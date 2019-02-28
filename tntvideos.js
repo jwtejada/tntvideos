@@ -63,10 +63,11 @@ $('.youtube').each(function () {
 				animate: true,
 				offset: $("header").outerHeight(),
 				bodyPlaying: null,			
-				mobileWidth: 900
+				mobileWidth: 900,
+				callback: function() {}
 			}                  
 			options =  $.extend(defaults, options);
-
+						
 			return this.each(function() {				
 				var o = options;			
 				var closeBtn = o.closeButton.replace(/\./g, '');
@@ -77,7 +78,7 @@ $('.youtube').each(function () {
 					$(this).find(".thumbnail").remove();
 					setupVimeo(vid_obj);
 				} 
-				
+
 				$(this).on("click", o.playButton, function () {		
 					var vid_type = vid_obj.data('player');
 
@@ -129,6 +130,7 @@ $('.youtube').each(function () {
 						$('html, body').animate({
 							scrollTop: vid_obj.offset().top - o.offset
 						}, 1000);	}
+					options.callback.call(this);
 					return false;
 				});		
 
@@ -158,19 +160,17 @@ $('.youtube').each(function () {
 						"muted": "true",
 						"loop": "true"
 					});
-					video[0].muted = 1;					
+					video[0].muted = 1;
 					video[0].controls = 0;
-					
 				}else {    
 					vid_obj.addClass("playing")
 						.find("[data-embed]")
-						.append('<a class="' + closeBtn + '"><i class="icon-plus"></i> Close Video</a>');			
+						.append('<a class="' + closeBtn + '"><i class="icon-plus"></i> Close Video</a>');
 					video.attr({
 						"controls": "true",
 						"muted": "false",
 						"loop": "false"
 					});
-
 					video[0].currentTime = 0;
 					video[0].muted = 0;
 					video[0].controls = 1;
