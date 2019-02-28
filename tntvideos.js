@@ -158,7 +158,9 @@ $('.youtube').each(function () {
 						"muted": "true",
 						"loop": "true"
 					});
-					video[0].muted = 1;
+					video[0].muted = 1;					
+					video[0].controls = 0;
+					
 				}else {    
 					vid_obj.addClass("playing")
 						.find("[data-embed]")
@@ -171,7 +173,7 @@ $('.youtube').each(function () {
 
 					video[0].currentTime = 0;
 					video[0].muted = 0;
-					video[0].controls = 0;
+					video[0].controls = 1;
 				}
 			}
 
