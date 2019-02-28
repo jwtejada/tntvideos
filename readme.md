@@ -16,10 +16,14 @@ $(function () {
 ### Advanced 
 ```javascript
 $(function () {			
-	$("[data-player]").tntvideos({
-		playButton: '.play-btn',
-		youtube: false
-	});	
+	//defaults
+	$("[data-player]").tntvideos({		
+		playButton: '.play',
+		closeButton: '.close',
+		bodyPlaying: null,
+		animate: true,
+		mobileWidth: 900
+	});		
 });
 ```
 
