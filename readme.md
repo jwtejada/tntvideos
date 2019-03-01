@@ -86,8 +86,7 @@ $(function () {
 ```html
     <div class="banner" data-player="youtube">
     	<div data-embed="yEkWVQywXIE" data-width="560" data-height="315"></div>
-    		<a class="play"></a>
-    	</div>
+    	<a class="play"></a>
     </div> 
 ```    
 
