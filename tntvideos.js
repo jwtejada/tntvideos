@@ -77,8 +77,12 @@ $('.youtube').each(function () {
 
 				if ($(window).width() > o.mobileWidth && vid_type=="vimeo" || vid_type=="vimeo-solo") {
 					$(this).find(".thumbnail").remove();
-					setupVimeo(vid_obj);
+					setupVimeo(vid_obj);					
 				} 
+				
+				if ($(window).width() < o.mobileWidth && vid_type!="youtube") {
+					$(this).find(o.playButton).appendTo("[data-embed]");
+				}
 
 				$(this).on("click", o.playButton, function () {		
 					var vid_type = vid_obj.data('player');
