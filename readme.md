@@ -59,6 +59,7 @@ $(function () {
 | onClose: function() | Callback function for the close button |
 
 ## Banner Vimeo HTML
+```html
     <div class="banner" data-player="vimeo" data-vimeo="290738166.hd.mp4?s=ee27ae407692d8723a18b6c5e43356c7caac01a6">
     	<div data-embed="yEkWVQywXIE" data-width="560" data-height="315">
     		<img alt="youtube thumbnail" class="thumbnail" src="https://img.youtube.com/vi/yEkWVQywXIE/maxresdefault.jpg">
@@ -68,8 +69,10 @@ $(function () {
     		<a class="play">Play Video</a>
     	</div>
     </div>
+```
     
 ## Banner Vimeo Full Length HTML
+```html
     <div class="banner" data-player="vimeo-solo" data-vimeo="290738166.hd.mp4?s=ee27ae407692d8723a18b6c5e43356c7caac01a6">
     	<div data-embed="290738166" data-width="560" data-height="315"></div>
     	<div class="caption">
@@ -77,14 +80,16 @@ $(function () {
     		<a class="play">Play Video</a>
     	</div>
     </div> 
+```
 
 ## Banner Youtube Only(NEW) HTML
+```html
     <div class="banner" data-player="youtube">
     	<div data-embed="yEkWVQywXIE" data-width="560" data-height="315"></div>
     		<a class="play"></a>
     	</div>
     </div> 
-    
+```    
 
 ## Youtube Lazyload HTML
 Include a custom image thumbnail or leave the container empty to use the default high resolution image from the youtube video.
