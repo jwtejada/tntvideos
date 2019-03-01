@@ -64,7 +64,8 @@ $('.youtube').each(function () {
 				offset: $("header").outerHeight(),
 				bodyPlaying: null,			
 				mobileWidth: 900,
-				callback: function() {}
+				onPlay: function() {},
+				onClose: function() {}
 			}                  
 			options =  $.extend(defaults, options);
 						
@@ -106,6 +107,7 @@ $('.youtube').each(function () {
 					for (var i = 0; i < $('iframe').length; i++) {
 						$('iframe')[i].contentWindow.postMessage('{"event":"command","func":"' + 'pauseVideo' + '","args":""}', '*');
 					}
+					options.onPlay.call(this);
 					return false;
 				});
 
@@ -130,7 +132,7 @@ $('.youtube').each(function () {
 						$('html, body').animate({
 							scrollTop: vid_obj.offset().top - o.offset
 						}, 1000);	}
-					options.callback.call(this);
+					options.onClose.call(this);
 					return false;
 				});		
 
