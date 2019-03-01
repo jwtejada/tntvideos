@@ -13,7 +13,20 @@ $(function () {
 });
 ```
 
-### Advanced 
+### Basic Options 
+```javascript
+$(function () {			
+	//defaults
+	$("[data-player]").tntvideos({		
+		playButton: '.play',
+		closeButton: '.close',
+		bodyPlaying: '.playing',
+		mobileWidth: 900
+	});			
+});
+```
+
+### Advanced Options
 ```javascript
 $(function () {			
 	//defaults
