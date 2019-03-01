@@ -1,5 +1,5 @@
 # TNT Videos
-Code by Tabitha R. modified by Jose T.
+Jquery code for TNT banners and optimized youtube videos with lazyload.
 
 ## Dependents
 - Get Device 
