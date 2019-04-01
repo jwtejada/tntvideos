@@ -1,4 +1,4 @@
-# TNT Videos
+# TNT Videos ver1.0
 Jquery code for TNT banners and optimized youtube videos with lazyload.
 
 ## Dependents
