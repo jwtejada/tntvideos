@@ -1,4 +1,4 @@
-# TNT Videos ver1.0
+# TNT Videos ver1.1
 Jquery code for TNT banners and optimized youtube videos with lazyload.
 
 ## Dependents
@@ -33,6 +33,7 @@ $(function () {
 	$("[data-player]").tntvideos({		
 		playButton: '.play',
 		closeButton: '.close',
+		closeButtonString: '<span><i class="icon-plus"></i></span>',
 		bodyPlaying: null,
 		animate: true,
 		mobileWidth: 900,
@@ -51,6 +52,7 @@ $(function () {
 | ------------ | ------------ |
 | playButton: '.play'  | Default class for the play button  |
 | closeButton: '.close' |  Default class for the close button |
+| closeButtonString: '<i class="icon-plus"></i> Close Video' | Default HTML string for the close button.
 | animate: true  | Scroll animation to the top of the container  |
 | bodyPlaying: null | Add a body playing class |
 | mobileWIdth: 900 | Responsive width |
@@ -58,7 +60,7 @@ $(function () {
 | onPlay: function() | Callback function for the play button  |
 | onClose: function() | Callback function for the close button |
 
-## Banner Vimeo HTML
+## Banner Vimeo width Youtube Player(Normal) HTML
 ```html
     <div class="banner" data-player="vimeo" data-vimeo="290738166.hd.mp4?s=ee27ae407692d8723a18b6c5e43356c7caac01a6">
     	<div data-embed="yEkWVQywXIE" data-width="560" data-height="315">
@@ -71,7 +73,7 @@ $(function () {
     </div>
 ```
     
-## Banner Vimeo Full Length HTML
+## Banner Vimeo Solo Player HTML
 ```html
     <div class="banner" data-player="vimeo-solo" data-vimeo="290738166.hd.mp4?s=ee27ae407692d8723a18b6c5e43356c7caac01a6">
     	<div data-embed="290738166" data-width="560" data-height="315"></div>
@@ -82,7 +84,7 @@ $(function () {
     </div> 
 ```
 
-## Banner Youtube Only(NEW) HTML
+## Banner Youtube Player HTML
 ```html
     <div class="banner" data-player="youtube">
     	<div data-embed="yEkWVQywXIE" data-width="560" data-height="315"></div>
