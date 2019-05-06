@@ -59,7 +59,8 @@ $('.youtube').each(function () {
 		tntvideos: function(options) { 
 			var defaults = {
 				playButton: '.play',
-				closeButton: '.close',				
+				closeButton: '.close',
+				closeButtonString: null,
 				animate: true,
 				offset: $("header").outerHeight(),
 				bodyPlaying: null,			
@@ -67,23 +68,30 @@ $('.youtube').each(function () {
 				onPlay: function() {},
 				onClose: function() {}
 			}                  
-			options =  $.extend(defaults, options);
-						
-			return this.each(function() {				
+			options =  $.extend(defaults, options);			
+			var vid_total = this.length - 1;
+			return this.each(function(index) {		
 				var o = options;			
 				var closeBtn = o.closeButton.replace(/\./g, '');
 				var vid_obj = $(this);
-				var vid_type = vid_obj.data('player');
-
-				if ($(window).width() > o.mobileWidth && vid_type=="vimeo" || vid_type=="vimeo-solo") {
-					$(this).find(".thumbnail").remove();
-					setupVimeo(vid_obj);					
-				} 
-				
-				if ($(window).width() < o.mobileWidth && vid_type!="youtube") {
-					$(this).find(o.playButton).appendTo("[data-embed]");
+				var vid_type = vid_obj.data('player');								
+								
+				if ( $(window).width() > o.mobileWidth ) {
+						if (vid_type == "vimeo" || vid_type == "vimeo-solo") {							
+							$(this).find(".thumbnail").remove();
+							setupVimeo(vid_obj);					
+						}
+				}					
+				if ($(window).width() < o.mobileWidth ) {
+					$(this).find(o.playButton).appendTo($(this).find("[data-embed]"));
+				}	
+				if (o.closeButtonString != null) {
+					var closeBtnString = o.closeButtonString;
+				} else {
+					var closeBtnString = '<i class="icon-plus"></i> Close Video';
 				}
-
+				
+				//PLAY BUTTON
 				$(this).on("click", o.playButton, function () {		
 					var vid_type = vid_obj.data('player');
 
@@ -94,13 +102,18 @@ $('.youtube').each(function () {
 					vid_obj.find(o.playButton).hide();
 
 					if (vid_type=="vimeo") {
-						playVimeo(vid_obj, closeBtn);
-					} else if (vid_type=="vimeo-solo") {
-						playVimeoSolo(vid_obj, closeBtn);
+						playVimeo(vid_obj, closeBtn, closeBtnString);					
 					} else if (vid_type=="youtube") {
-						playYoutube(vid_obj, closeBtn);
+						playYoutube(vid_obj, closeBtn, closeBtnString);
 					}
-
+					
+					if (vid_type=="vimeo-solo") {
+						if ($(window).width() < o.mobileWidth) {							
+					  	setupVimeo(vid_obj);
+						}
+						playVimeoSolo(vid_obj, closeBtn, closeBtnString);											
+					}
+					
 					if ($(window).width() > o.mobileWidth && o.animate == true) {
 						$('html, body').animate({
 							scrollTop: vid_obj.find("[data-embed]").offset().top - o.offset
@@ -115,50 +128,59 @@ $('.youtube').each(function () {
 					return false;
 				});
 
-				$(this).on("click", o.closeButton, function () {
-					var vid_obj = $(this).parents("[data-player]");						
-					vid_obj.removeClass("playing").find(".fluid-vid, iframe").remove();
-					vid_obj.find(o.closeButton).remove();
-					vid_obj.find("video, .thumbnail").show();
+				$(this).on("click", o.closeButton, function () {					
+					var vid_obj = $(this).parents("[data-player]");	
+					var vid_type = vid_obj.data('player');
+					
+					vid_obj.removeClass("playing");
+					vid_obj.find('.fluid-vid, iframe').remove();
+					vid_obj.find(o.closeButton).remove();					
+					vid_obj.find('video, .thumbnail').show();
 					vid_obj.find(o.playButton).show();
 
 					if(o.bodyPlaying != null) {
 						$("body").removeClass(o.bodyPlaying.replace(/\./g, ''));
 					}
-
-					var vid_type = vid_obj.data('player');
+					
 					var vid_stop = true;
 					if (vid_type == "vimeo-solo") {
-						playVimeoSolo(vid_obj, closeBtn, vid_stop);
+						if ( $(window).width() < options.mobileWidth ) {
+							  vid_obj.find('video').remove();						
+						} else {
+						 playVimeoSolo(vid_obj, closeBtn, closeBtnString, vid_stop);
+						}
 					}
-
+					
 					if(o.animate == true) {
 						$('html, body').animate({
 							scrollTop: vid_obj.offset().top - o.offset
 						}, 1000);	}
 					options.onClose.call(this);
 					return false;
-				});		
-
-			});		
-
+				});					
+				if ( index == vid_total ){
+					return false;
+				} 			
+			});	//end each loop
+			
 			function setupVimeo(vid_obj) {
 				vid_obj
 					.find("[data-embed]")
 					.prepend('<video autoplay="true" muted="muted" loop="true" src="https://player.vimeo.com/external/' + vid_obj.data('vimeo') + '&profile_id=174"></video>');
 			}
 
-			function playVimeo(vid_obj, closeBtn) {
+			function playVimeo(vid_obj, closeBtn, closeBtnString) {
 				vid_obj.addClass("playing").find("[data-embed]")
-					.append('<a class="' + closeBtn + '"><i class="icon-plus"></i> Close Video</a>')
+					.append('<a class="' + closeBtn + '">' + closeBtnString + '</a>')
 					.setupYoutube();
 				vid_obj
 					.find("video, .thumbnail")
 					.hide();
 			}
 			//extra function to setup vimeo legacy code		
-			function playVimeoSolo(vid_obj, closeBtn, vid_stop) {
-				var video = vid_obj.find("video");	
+			function playVimeoSolo(vid_obj, closeBtn, closeBtnString, vid_stop) {
+				var video = vid_obj.find("video");		
+								
 				if (vid_stop){	
 					vid_obj.removeClass("playing");
 					video.attr({
@@ -171,7 +193,7 @@ $('.youtube').each(function () {
 				}else {    
 					vid_obj.addClass("playing")
 						.find("[data-embed]")
-						.append('<a class="' + closeBtn + '"><i class="icon-plus"></i> Close Video</a>');
+						.append('<a class="' + closeBtn + '">' + closeBtnString + '</a>').find(".thumbnail").hide();
 					video.attr({
 						"controls": "true",
 						"muted": "false",
@@ -183,9 +205,9 @@ $('.youtube').each(function () {
 				}
 			}
 
-			function playYoutube(vid_obj, closeBtn) {
+			function playYoutube(vid_obj, closeBtn, closeBtnString) {
 				vid_obj.addClass("playing").find("[data-embed]")
-					.append('<a class="' + closeBtn + '"><i class="icon-plus"></i> Close Video</a>');
+					.append('<a class="' + closeBtn + '">' + closeBtnString +'</a>');
 				vid_obj.find(".thumbnail").hide();
 				for (var i = 0; i < $('iframe').length; i++) {
 					$('iframe')[i].contentWindow.postMessage('{"event":"command","func":"' + 'pauseVideo' + '","args":""}', '*');
